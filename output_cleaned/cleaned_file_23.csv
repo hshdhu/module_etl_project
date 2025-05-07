@@ -1,0 +1,4 @@
+TIME,TIME_QC,LATITUDE,LONGITUDE,POSITION_QC,DC_REFERENCE,TRAJECTORY,TEMP,TEMP_QC
+2025-04-29 07:00:00,1.0,1.2,88.8,1.0,b'3398428712                      ',b'3bbjmml',30.0,1.0
+2025-04-30 02:00:00,1.0,-2.7,84.0,1.0,b'3398748550                      ',b'3bbjmml',30.0,1.0
+2025-04-30 18:00:00,1.0,-5.9,80.0,1.0,b'3399027017                      ',b'3bbjmml',31.0,1.0
