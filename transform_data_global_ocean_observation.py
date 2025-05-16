@@ -1,5 +1,6 @@
 import os
-import pandas as pd
+import shutil
+import uuid
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, trim, lower
 from pyspark.sql.types import DoubleType
@@ -18,7 +19,6 @@ def save_processed_file(log_path, filename):
 
 
 def transform_incremental(input_folder, output_folder, log_path):
-    # Đảm bảo thư mục output tồn tại
     os.makedirs(output_folder, exist_ok=True)
 
     spark = SparkSession.builder.appName("Incremental Transform").getOrCreate()
@@ -46,14 +46,20 @@ def transform_incremental(input_folder, output_folder, log_path):
             (col("TEMP_QC") == 1.0)
         )
 
-        # Thay vì sử dụng Spark để ghi file, chuyển đổi thành pandas DataFrame và ghi bằng pandas
-        output_file = os.path.join(output_folder, f"cleaned_{filename}")
+        # Ghi ra thư mục tạm bằng Spark
+        tmp_output = os.path.join(output_folder, f"tmp_{uuid.uuid4().hex}")
+        df_clean.coalesce(1).write.option("header", True).mode("overwrite").csv(tmp_output)
 
-        # Chuyển đổi sang pandas DataFrame
-        pandas_df: pd.DataFrame = df_clean.toPandas()
+        # Tìm file part-*.csv trong thư mục tạm và đổi tên
+        for f in os.listdir(tmp_output):
+            if f.startswith("part-") and f.endswith(".csv"):
+                tmp_part_file = os.path.join(tmp_output, f)
+                final_file_path = os.path.join(output_folder, f"cleaned_{filename}")
+                shutil.move(tmp_part_file, final_file_path)
+                break
 
-        # Ghi dữ liệu bằng pandas
-        pandas_df.to_csv(output_file, index=False)
+        # Xóa thư mục tạm
+        shutil.rmtree(tmp_output)
 
         save_processed_file(log_path, filename)
         print(f"✅ Đã xử lý file: {filename}")
@@ -61,9 +67,10 @@ def transform_incremental(input_folder, output_folder, log_path):
     spark.stop()
 
 
+
 if __name__ == "__main__":
     transform_incremental(
         "data_global_ocean_observation/data_global_ocean_observation_csv_files",
-        "output_cleaned",
+        "output/output_clean_data_global_ocean_observation",
         "processed_files.txt"
     )
