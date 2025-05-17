@@ -31,5 +31,17 @@ def load_data(input_folder, output_data):
 if __name__ == "__main__":
     load_data(
         "data_global_ocean_observation",
-        "module_etl_project/output_cleaned",
+        "module_etl_project/output/output_clean_data_global_ocean_observation",
+    )
+    load_data(
+        "san_luong_thuy_san",
+        "module_etl_project/output/san_luong_thuy_san",
+    )
+    load_data(
+        "data_weather_ocean_vn",
+        "module_etl_project/data_weather/data_weather_ocean_vn_listdate",
+    )
+    load_data(
+        "data_fao_long",
+        "module_etl_project/output/fao_long_cleaned",
     )
