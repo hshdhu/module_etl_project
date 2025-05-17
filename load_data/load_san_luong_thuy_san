@@ -1,0 +1,5 @@
+import load
+load.load_data(
+        "san_luong_thuy_san",
+        "module_etl_project/output/san_luong_thuy_san",
+    )
