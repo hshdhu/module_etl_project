@@ -12,7 +12,8 @@ def load_data(input_folder, output_data):
     print(collection_name)
     collection = db[collection_name]
     # Đường dẫn tới file đã xử lý
-    loaded_path="module_etl_project/load_data/loaded_files.txt"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    loaded_path = os.path.join(base_dir, "loaded_files.txt")
     # Đọc danh sách file đã xử lý
     with open(loaded_path, "r") as f:
         loaded_files = f.read().splitlines()
