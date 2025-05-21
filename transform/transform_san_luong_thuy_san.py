@@ -6,10 +6,10 @@ import shutil
 spark = SparkSession.builder.appName("MergeFisheryData").getOrCreate()
 
 # Đọc các file CSV
-aquaculture_df = spark.read.option("header", True).csv("crawl_sanluong_thuysan/data_sanluong_thuysan/aquaculture_farmed_fish_production_data.csv")
-capture_df = spark.read.option("header", True).csv("crawl_sanluong_thuysan/data_sanluong_thuysan/capture_fishery_production_data.csv")
-consumption_df = spark.read.option("header", True).csv("crawl_sanluong_thuysan/data_sanluong_thuysan/fish_and_seafood_consumption_per_capita_data.csv")
-production_df = spark.read.option("header", True).csv("crawl_sanluong_thuysan/data_sanluong_thuysan/fish_seafood_production_data.csv")
+aquaculture_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/aquaculture_farmed_fish_production_data.csv")
+capture_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/capture_fishery_production_data.csv")
+consumption_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/fish_and_seafood_consumption_per_capita_data.csv")
+production_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/fish_seafood_production_data.csv")
 
 # Đổi tên cột
 aquaculture_df = aquaculture_df.withColumnRenamed("er_fsh_aqua_mt", "Aquaculture_Fish_Production_MT")
@@ -39,8 +39,8 @@ combined_df = combined_df.dropna()
 combined_df = combined_df.orderBy("Entity", "Year")
 
 # Ghi ra thư mục tạm
-output_dir = "output/san_luong_thuy_san/san_luong_thuy_san_cleaned"
-final_csv = "output/san_luong_thuy_san/san_luong_thuy_san_cleaned.csv"
+output_dir = "../output/san_luong_thuy_san/san_luong_thuy_san_cleaned"
+final_csv = "../output/san_luong_thuy_san/san_luong_thuy_san_cleaned.csv"
 combined_df.coalesce(1).write.option("header", True).csv(output_dir)
 
 # Tìm file CSV trong thư mục tạm và đổi tên

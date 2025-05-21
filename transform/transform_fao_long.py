@@ -8,7 +8,7 @@ import shutil
 spark = SparkSession.builder.appName("FAO Wide to Long").getOrCreate()
 
 # === 2. Đọc tất cả các file CSV trong thư mục ===
-data_path = "data_fao/data/"
+data_path = "../data_input/data_fao/"
 csv_files = [os.path.join(data_path, f) for f in os.listdir(data_path) if f.endswith(".csv")]
 
 # === 3. Gộp dữ liệu từ tất cả file CSV ===
@@ -51,7 +51,7 @@ for file_path in csv_files:
         df_all = df_all.unionByName(df_long_clean)
 
 # === 4. Ghi file tạm theo từng năm ===
-output_dir = "output/fao_long_cleaned"
+output_dir = "../output/fao_long_cleaned"
 if os.path.exists(output_dir):
     shutil.rmtree(output_dir)
 os.makedirs(output_dir, exist_ok=True)

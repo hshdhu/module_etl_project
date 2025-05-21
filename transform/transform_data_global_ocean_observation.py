@@ -70,7 +70,7 @@ def transform_incremental(input_folder, output_folder, log_path):
 
 if __name__ == "__main__":
     transform_incremental(
-        "data_global_ocean_observation/data_global_ocean_observation_csv_files",
-        "output/output_clean_data_global_ocean_observation",
+        "../data_input/data_global_ocean_observation/data_global_ocean_observation_csv_files",
+        "../output/output_clean_data_global_ocean_observation",
         "processed_files.txt"
     )
