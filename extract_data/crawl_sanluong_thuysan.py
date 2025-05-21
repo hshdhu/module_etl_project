@@ -1,7 +1,6 @@
 import pandas as pd
-import requests
 import os
-import json
+
 output_csv_folder = "data_input/data_sanluongthuysan"
 os.makedirs(output_csv_folder, exist_ok=True)
 # Lấy data từ web
