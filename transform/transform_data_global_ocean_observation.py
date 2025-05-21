@@ -5,18 +5,15 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, trim, lower
 from pyspark.sql.types import DoubleType
 
-
 def get_processed_files(log_path):
     if not os.path.exists(log_path):
         return set()
     with open(log_path, "r") as f:
         return set(line.strip() for line in f.readlines())
 
-
 def save_processed_file(log_path, filename):
     with open(log_path, "a") as f:
         f.write(filename + "\n")
-
 
 def transform_incremental(input_folder, output_folder, log_path):
     os.makedirs(output_folder, exist_ok=True)
@@ -66,11 +63,9 @@ def transform_incremental(input_folder, output_folder, log_path):
 
     spark.stop()
 
-
-
 if __name__ == "__main__":
-    transform_incremental(
-        "../data_input/data_global_ocean_observation/data_global_ocean_observation_csv_files",
-        "../output/output_clean_data_global_ocean_observation",
-        "processed_files.txt"
-    )
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    input_folder = os.path.join(BASE_DIR, "data_input", "data_global_ocean_observation", "data_global_ocean_observation_csv_files")
+    output_folder = os.path.join(BASE_DIR, "output", "output_clean_data_global_ocean_observation")
+    log_path = os.path.join(BASE_DIR, "transform", "processed_files.txt")
+    transform_incremental(input_folder, output_folder, log_path)

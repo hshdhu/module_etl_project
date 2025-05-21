@@ -2,14 +2,25 @@ from pyspark.sql import SparkSession
 import os
 import shutil
 
+# Định nghĩa các đường dẫn sử dụng os.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_input_dir = os.path.join(BASE_DIR, "data_input", "data_sanluongthuysan")
+output_dir = os.path.join(BASE_DIR, "output", "san_luong_thuy_san", "san_luong_thuy_san_cleaned")
+final_csv = os.path.join(BASE_DIR, "output", "san_luong_thuy_san", "san_luong_thuy_san_cleaned.csv")
+
+aquaculture_path = os.path.join(data_input_dir, "aquaculture_farmed_fish_production_data.csv")
+capture_path = os.path.join(data_input_dir, "capture_fishery_production_data.csv")
+consumption_path = os.path.join(data_input_dir, "fish_and_seafood_consumption_per_capita_data.csv")
+production_path = os.path.join(data_input_dir, "fish_seafood_production_data.csv")
+
 # Khởi tạo Spark session
 spark = SparkSession.builder.appName("MergeFisheryData").getOrCreate()
 
 # Đọc các file CSV
-aquaculture_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/aquaculture_farmed_fish_production_data.csv")
-capture_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/capture_fishery_production_data.csv")
-consumption_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/fish_and_seafood_consumption_per_capita_data.csv")
-production_df = spark.read.option("header", True).csv("../data_input/data_sanluongthuysan/fish_seafood_production_data.csv")
+aquaculture_df = spark.read.option("header", True).csv(aquaculture_path)
+capture_df = spark.read.option("header", True).csv(capture_path)
+consumption_df = spark.read.option("header", True).csv(consumption_path)
+production_df = spark.read.option("header", True).csv(production_path)
 
 # Đổi tên cột
 aquaculture_df = aquaculture_df.withColumnRenamed("er_fsh_aqua_mt", "Aquaculture_Fish_Production_MT")
@@ -39,8 +50,7 @@ combined_df = combined_df.dropna()
 combined_df = combined_df.orderBy("Entity", "Year")
 
 # Ghi ra thư mục tạm
-output_dir = "../output/san_luong_thuy_san/san_luong_thuy_san_cleaned"
-final_csv = "../output/san_luong_thuy_san/san_luong_thuy_san_cleaned.csv"
+os.makedirs(os.path.dirname(output_dir), exist_ok=True)
 combined_df.coalesce(1).write.option("header", True).csv(output_dir)
 
 # Tìm file CSV trong thư mục tạm và đổi tên
