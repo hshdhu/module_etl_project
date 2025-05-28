@@ -8,4 +8,6 @@ project xây dựng module etl
 [xarray] [2025.4.0]
 [pysaprk] [3.5.5]
 [pymongo] [4.13.0]
+[scrapy] [2.13.0]
+[requests] [2.32.3]
 
