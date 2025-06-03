@@ -10,4 +10,5 @@ project xây dựng module etl
 [pymongo] [4.13.0]
 [scrapy] [2.13.0]
 [requests] [2.32.3]
+[scrapy] [2.13.1]
 
