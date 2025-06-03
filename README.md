@@ -11,4 +11,5 @@ project xây dựng module etl
 [scrapy] [2.13.0]
 [requests] [2.32.3]
 [scrapy] [2.13.1]
+[netCDF4] [1.7.2]
 
